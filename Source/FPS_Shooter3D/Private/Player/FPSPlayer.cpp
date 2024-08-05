@@ -3,12 +3,11 @@
 
 #include "Player/FPSPlayer.h"
 #include "Player/FPSPlayerController.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "LocomotionSystem/GroundMoveState.h"
-#include "Kismet/GameplayStatics.h"
+#include "LocomotionSystem/LookState.h"
+
 #include "Kismet/KismetSystemLibrary.h"
-
-
-
 
 APlayerController* AFPSPlayer::GetPlayerController()
 {
@@ -21,8 +20,12 @@ AFPSPlayer::AFPSPlayer()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	FPSCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+
 	AbstractState* State = new GroundMoveState();
 	StateLibrary.Add(StateEnum::Walking, State);
+	State = new LookState();
+	StateLibrary.Add(StateEnum::Looking, State);
 }
 
 // Called when the game starts or when spawned
@@ -33,6 +36,7 @@ void AFPSPlayer::BeginPlay()
 	FPSController = Cast<AFPSPlayerController>(GetController());
 	
 	StateLibrary[StateEnum::Walking]->CacheInterface(this,GetWorld());
+	StateLibrary[StateEnum::Looking]->CacheInterface(this, GetWorld());
 }
 
 // Called every frame
@@ -45,21 +49,17 @@ void AFPSPlayer::Tick(float DeltaTime)
 //Movement Logic 
 void AFPSPlayer::MoveFunction(const FInputActionValue& InputValue)
 {	
-	FVector2D AxisValue = InputValue.Get<FVector2D>();
-	MovementValue.Set<FVector2D>(AxisValue);
-
-	// Create a TVariant<FVector2D, bool> and pass it
+	//Setting InputValue To TVariant
+	MovementValue.Set<FVector2D>(InputValue.Get<FVector2D>());
+    
+	//Calling The Function Of Locomotion State From TMap(StateLibrary)
 	StateLibrary[StateEnum::Walking]->EnterState(this, MovementValue);
 
-	//FVector2D MovementValue = InputValue.Get<FVector2D>();
+}
 
-	//FRotator CtrlRotation = FPSController->GetControlRotation();                   //Implementation Needs To Change on a  Separate class
-	//FRotator YawRotation = FRotator(0, CtrlRotation.Yaw, 0);
-
-	//FVector XDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	//FVector YDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-	//AddMovementInput(XDirection, MovementValue.X);
-	//AddMovementInput(YDirection, MovementValue.Y);
+void AFPSPlayer::LookFunction(const FInputActionValue& InputValue)
+{  
+	MovementValue.Set<FVector2D>(InputValue.Get<FVector2D>());
+	StateLibrary[StateEnum::Looking]->EnterState(this, MovementValue);
 }
 

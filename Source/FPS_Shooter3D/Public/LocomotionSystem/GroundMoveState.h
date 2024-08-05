@@ -18,17 +18,19 @@ public:
 	GroundMoveState();
 	~GroundMoveState();
 
+	//Interface Function for Trigger Movement
 	void EnterState(ACharacter* Player, TVariant<FVector2D, bool>&InputValue) override;
+	//Interface Function For Caching Variables
 	void CacheInterface(ACharacter* Player,UWorld* World) override;
 
 private:
 
+	//Caching PlayerInterface And Controller
 	TScriptInterface<IPlayerInterface>PlayerInterface;
-    
 	APlayerController* PlayerController;
 
-	void PPrintString(FString Str);
+	//For Avoid Repeated Declaration Of Variable In The EnterState Function
+	FVector2D AxisValue;
 
-	UWorld* GetWorld;
 
 };

@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Interfaces/PlayerInterface.h"
 #include "InputActionValue.h"
+#include "Camera/CameraComponent.h"
 #include "Player/LocomotionSystem/AbstractState.h"
 #include "FPSPlayer.generated.h"
 
@@ -18,16 +19,23 @@ class FPS_SHOOTER3D_API AFPSPlayer : public ACharacter , public IPlayerInterface
 
 public:
 
+	//Interface Function
 	APlayerController* GetPlayerController() override;
 
 	AFPSPlayer();
 
+	UPROPERTY(BlueprintReadWrite,EditDefaultsOnly)
+	UCameraComponent* FPSCamera;
+
 private:
 
+	//Referance For The Custom Controller
 	AFPSPlayerController* FPSController;
 
+	//For Storing Differnt LocomotionStates
 	TMap<StateEnum, AbstractState*>StateLibrary;
 
+	//Variable For Passing In LocomotionStates
 	TVariant<FVector2D, bool>MovementValue;
 
 protected:
@@ -40,5 +48,6 @@ public:
 
 	//Function To Contain Movement Logic
 	void MoveFunction(const FInputActionValue& InputValue);
+	void LookFunction(const FInputActionValue& InputValue);
 
 };

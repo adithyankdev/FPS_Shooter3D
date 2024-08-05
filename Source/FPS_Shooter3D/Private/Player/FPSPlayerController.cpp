@@ -12,6 +12,7 @@ void AFPSPlayerController::BeginPlay()
 
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = GetLocalPlayer()->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
 	{
+		//Setting Up The Mapping Context
 		Subsystem->ClearAllMappings();
 		Subsystem->AddMappingContext(PlayerMappingContext, 0);
 	}
@@ -20,7 +21,9 @@ void AFPSPlayerController::BeginPlay()
 	{
 	    if (AFPSPlayer* FPSPlayer = Cast<AFPSPlayer>(GetPawn()))
 		{
+			//Binding InputAction And The Correspoding Functions
 			EnhancedInput->BindAction(MoveAction, ETriggerEvent::Triggered, FPSPlayer, &AFPSPlayer::MoveFunction);
+			EnhancedInput->BindAction(LookAction, ETriggerEvent::Triggered, FPSPlayer, &AFPSPlayer::LookFunction);
 		}
 	}
 

@@ -23,8 +23,13 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	UInputMappingContext* PlayerMappingContext;
 
+	//InputAction For Ground Movement --WSAD
 	UPROPERTY(EditDefaultsOnly)
 	UInputAction* MoveAction;
+
+	//InputAction For Look Movement --MouseXY
+	UPROPERTY(EditDefaultsOnly)
+	UInputAction* LookAction;
 	
 	void BeginPlay() override;
 

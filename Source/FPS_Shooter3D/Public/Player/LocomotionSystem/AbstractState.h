@@ -12,6 +12,7 @@ enum class StateEnum
 	Walking,
 	Jumping,
 	Crouching,
+	Looking,
 };
 
 

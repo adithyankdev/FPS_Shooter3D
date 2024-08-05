@@ -10,18 +10,18 @@ GroundMoveState::GroundMoveState()
 
 GroundMoveState::~GroundMoveState()
 {
+	//Avoid Memory Leak
 	PlayerInterface = nullptr;
+	PlayerController = nullptr;
 }
 
 void GroundMoveState::EnterState(ACharacter* Player, TVariant<FVector2D, bool>&InputValue)
 {
 	if (PlayerController)
 	{
-		FVector2D AxisValue = InputValue.Get<FVector2D>();
-
+	    AxisValue = InputValue.Get<FVector2D>();
 		Player->AddMovementInput(Player->GetActorForwardVector(),AxisValue.X);
 		Player->AddMovementInput(Player->GetActorRightVector(), AxisValue.Y);
-		PPrintString("MovementValue");
 	}
 }
 
@@ -29,15 +29,11 @@ void GroundMoveState::CacheInterface(ACharacter* Player,UWorld* World)
 {
 	if (IPlayerInterface* Interface = Cast <IPlayerInterface>(Player))
 	{
+		//Setting Value Into The Interfaces
 		PlayerInterface.SetObject(Player);
 		PlayerInterface.SetInterface(Interface);
 		
 		PlayerController =  PlayerInterface->GetPlayerController();
 	}
-	GetWorld = World;
-}
-
-void GroundMoveState::PPrintString(FString Str)
-{
-	UKismetSystemLibrary::PrintString(GetWorld, Str);
+	
 }
