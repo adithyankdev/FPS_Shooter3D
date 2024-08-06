@@ -24,7 +24,7 @@ public:
 
 	AFPSPlayer();
 
-	UPROPERTY(BlueprintReadWrite,EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly)
 	UCameraComponent* FPSCamera;
 
 private:
@@ -43,11 +43,13 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	
+
 	virtual void Tick(float DeltaTime) override;
 
 	//Function To Contain Movement Logic
 	void MoveFunction(const FInputActionValue& InputValue);
 	void LookFunction(const FInputActionValue& InputValue);
+
+
 
 };

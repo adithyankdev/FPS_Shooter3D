@@ -20,6 +20,7 @@ void GroundMoveState::EnterState(ACharacter* Player, TVariant<FVector2D, bool>&I
 	if (PlayerController)
 	{
 	    AxisValue = InputValue.Get<FVector2D>();
+
 		Player->AddMovementInput(Player->GetActorForwardVector(),AxisValue.X);
 		Player->AddMovementInput(Player->GetActorRightVector(), AxisValue.Y);
 	}
