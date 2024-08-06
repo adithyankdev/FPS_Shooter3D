@@ -21,6 +21,7 @@ AFPSPlayer::AFPSPlayer()
 	PrimaryActorTick.bCanEverTick = true;
 
 	FPSCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	FPSCamera->SetupAttachment(RootComponent);
 
 	AbstractState* State = new GroundMoveState();
 	StateLibrary.Add(StateEnum::Walking, State);
