@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Interfaces/PlayerAnimeInterface.h"
 #include "Animation/AnimInstance.h"
 #include "PlayerAnimInstance.generated.h"
 
@@ -10,9 +11,13 @@
  * 
  */
 UCLASS()
-class FPS_SHOOTER3D_API UPlayerAnimInstance : public UAnimInstance
+class FPS_SHOOTER3D_API UPlayerAnimInstance : public UAnimInstance , public IPlayerAnimeInterface
 {
 	GENERATED_BODY()
+
+public:
+
+	void ChangeLocomotionState(ELocomotionState NewState) override;
 
 protected:
 
@@ -26,6 +31,9 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 	float PitchRotation;
+
+	UPROPERTY(BlueprintReadOnly)
+	ELocomotionState CurrentState;
 
 public:
 

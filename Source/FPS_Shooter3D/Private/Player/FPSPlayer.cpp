@@ -6,7 +6,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "LocomotionSystem/GroundMoveState.h"
 #include "LocomotionSystem/LookState.h"
-
+#include "Player/Animation/PlayerAnimInstance.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 APlayerController* AFPSPlayer::GetPlayerController()
@@ -20,8 +20,12 @@ AFPSPlayer::AFPSPlayer()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
+	CameraBoom->SetupAttachment(GetMesh(), TEXT("head"));
+
 	FPSCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	FPSCamera->SetupAttachment(RootComponent);
+	//FPSCamera->SetupAttachment(GetMesh(),TEXT("head"));
+	FPSCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 
 	AbstractState* State = new GroundMoveState();
 	StateLibrary.Add(StateEnum::Walking, State);
@@ -38,6 +42,13 @@ void AFPSPlayer::BeginPlay()
 	
 	StateLibrary[StateEnum::Walking]->CacheInterface(this,GetWorld());
 	StateLibrary[StateEnum::Looking]->CacheInterface(this, GetWorld());
+
+	if (IPlayerAnimeInterface* Interface = Cast<IPlayerAnimeInterface>(GetMesh()->GetAnimInstance()))
+	{
+		AnimInstanceInterface.SetObject(GetMesh()->GetAnimInstance());
+		AnimInstanceInterface.SetInterface(Interface);
+	}
+	
 }
 
 // Called every frame
@@ -62,5 +73,18 @@ void AFPSPlayer::LookFunction(const FInputActionValue& InputValue)
 {  
 	MovementValue.Set<FVector2D>(InputValue.Get<FVector2D>());
 	StateLibrary[StateEnum::Looking]->EnterState(this, MovementValue);
+}
+
+void AFPSPlayer::ChangeState()
+{
+	if (ToogleValue)
+	{
+		AnimInstanceInterface->ChangeLocomotionState(ELocomotionState::Crouch);
+	}
+	else
+	{
+		AnimInstanceInterface->ChangeLocomotionState(ELocomotionState::GroundLocomotion);
+	}
+	ToogleValue = !ToogleValue;
 }
 

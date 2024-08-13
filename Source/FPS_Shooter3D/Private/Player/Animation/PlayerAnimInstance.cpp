@@ -4,9 +4,16 @@
 #include "Player/Animation/PlayerAnimInstance.h"
 #include "GameFramework/Character.h"
 
+void UPlayerAnimInstance::ChangeLocomotionState(ELocomotionState NewState)
+{
+	CurrentState = NewState;
+	UE_LOG(LogTemp, Error, TEXT("Triggered"));
+}
+
 void UPlayerAnimInstance::NativeInitializeAnimation()
 {
 	OwnerCharacter = Cast <ACharacter>(TryGetPawnOwner());
+	CurrentState = ELocomotionState::GroundLocomotion;
 }
 
 void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaTime)
