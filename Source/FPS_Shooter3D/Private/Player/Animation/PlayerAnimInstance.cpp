@@ -4,15 +4,17 @@
 #include "Player/Animation/PlayerAnimInstance.h"
 #include "GameFramework/Character.h"
 
+//Assiging The Latest State
 void UPlayerAnimInstance::ChangeLocomotionState(ELocomotionState NewState)
 {
 	CurrentState = NewState;
-	UE_LOG(LogTemp, Error, TEXT("Triggered"));
 }
 
 void UPlayerAnimInstance::NativeInitializeAnimation()
 {
 	OwnerCharacter = Cast <ACharacter>(TryGetPawnOwner());
+	//Setting Default State To GroundLocomotion++
+
 	CurrentState = ELocomotionState::GroundLocomotion;
 }
 
@@ -28,7 +30,7 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaTime)
 		float YawRotation = OwnerCharacter->GetBaseAimRotation().Pitch;
 		if (YawRotation >= 180.0f)
 		{
-			PitchRotation = YawRotation - 360.0f;
+			PitchRotation = YawRotation - 360.0f;    //Decrementing The Pitch  , Preventing Unexpected Behaviour (Scope Of 90 to -90)
 		}
 		else
 		{

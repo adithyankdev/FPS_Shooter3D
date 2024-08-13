@@ -30,5 +30,6 @@ class FPS_SHOOTER3D_API IPlayerAnimeInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 
+	//Function For Change Motion State Influencing Animation
 	virtual void ChangeLocomotionState(ELocomotionState NewState) = 0; 
 };

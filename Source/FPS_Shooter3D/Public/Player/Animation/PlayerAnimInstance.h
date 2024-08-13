@@ -21,17 +21,22 @@ public:
 
 protected:
 
+	//Caching The chracter Interface
 	class ACharacter* OwnerCharacter;
 
+	//Variable For Storing The Speed For Character
 	UPROPERTY(BlueprintReadOnly)
 	float Speed;
 
+	//Variable For Storing The Current Direction Of The  Character
 	UPROPERTY(BlueprintReadOnly)
 	float Direction;;
 
+	//Varibale For Storing The Pitch Rotation 
 	UPROPERTY(BlueprintReadOnly)
 	float PitchRotation;
-
+	
+	//Variable For Storing The Current Locomotion State
 	UPROPERTY(BlueprintReadOnly)
 	ELocomotionState CurrentState;
 

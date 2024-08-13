@@ -30,7 +30,11 @@ private:
 	//InputAction For Look Movement --MouseXY
 	UPROPERTY(EditDefaultsOnly)
 	UInputAction* LookAction;
-	
+
+	//InputAction For Crouch Movement - C
+	UPROPERTY(EditDefaultsOnly)
+	UInputAction* CrouchToggleAction;
+
 	void BeginPlay() override;
 
 };

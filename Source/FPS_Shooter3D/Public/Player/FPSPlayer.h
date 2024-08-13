@@ -58,11 +58,11 @@ public:
 	//Function To Contain Movement Logic
 	void MoveFunction(const FInputActionValue& InputValue);
 	void LookFunction(const FInputActionValue& InputValue);
+	void CrouchToggleFunction();
 
-	bool ToogleValue;
+	//Variable for Implementing The Toggle Functionality -- FlipFlop In The Blueprint
+	bool CrouchToggleValue;
 
-	UFUNCTION(BlueprintCallable)
-	void ChangeState();
 
 
 };

@@ -18,7 +18,7 @@ APlayerController* AFPSPlayer::GetPlayerController()
 AFPSPlayer::AFPSPlayer()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
 	CameraBoom->SetupAttachment(GetMesh(), TEXT("head"));
@@ -31,6 +31,8 @@ AFPSPlayer::AFPSPlayer()
 	StateLibrary.Add(StateEnum::Walking, State);
 	State = new LookState();
 	StateLibrary.Add(StateEnum::Looking, State);
+
+	
 }
 
 // Called when the game starts or when spawned
@@ -75,16 +77,28 @@ void AFPSPlayer::LookFunction(const FInputActionValue& InputValue)
 	StateLibrary[StateEnum::Looking]->EnterState(this, MovementValue);
 }
 
-void AFPSPlayer::ChangeState()
+//Function Implementing With Toogle Method
+void AFPSPlayer::CrouchToggleFunction()
 {
-	if (ToogleValue)
+	CrouchToggleValue = !CrouchToggleValue;
+	if (CrouchToggleValue)
 	{
+		Crouch();
+	//	GetCharacterMovement()->Crouch();  
+	//	GetCharacterMovement()->CanCrouch = true;
+		
 		AnimInstanceInterface->ChangeLocomotionState(ELocomotionState::Crouch);
+		//GetCharacterMovement()->MaxWalkSpeed = 150.0f;
 	}
 	else
 	{
+		UnCrouch();
+	//	GetCharacterMovement()->UnCrouch();
+		//GetCharacterMovement()->CanCrouch = true;
 		AnimInstanceInterface->ChangeLocomotionState(ELocomotionState::GroundLocomotion);
+		//GetCharacterMovement()->MaxWalkSpeed = 250.0f;
 	}
-	ToogleValue = !ToogleValue;
+
 }
+
 

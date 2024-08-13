@@ -24,6 +24,7 @@ void AFPSPlayerController::BeginPlay()
 			//Binding InputAction And The Correspoding Functions
 			EnhancedInput->BindAction(MoveAction, ETriggerEvent::Triggered, FPSPlayer, &AFPSPlayer::MoveFunction);
 			EnhancedInput->BindAction(LookAction, ETriggerEvent::Triggered, FPSPlayer, &AFPSPlayer::LookFunction);
+			EnhancedInput->BindAction(CrouchToggleAction, ETriggerEvent::Completed, FPSPlayer, &AFPSPlayer::CrouchToggleFunction);
 		}
 	}
 
