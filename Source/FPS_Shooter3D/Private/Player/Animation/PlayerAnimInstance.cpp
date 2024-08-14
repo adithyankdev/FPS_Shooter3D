@@ -3,6 +3,9 @@
 
 #include "Player/Animation/PlayerAnimInstance.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
+
 
 //Assiging The Latest State
 void UPlayerAnimInstance::ChangeLocomotionState(ELocomotionState NewState)
@@ -16,13 +19,15 @@ void UPlayerAnimInstance::NativeInitializeAnimation()
 	//Setting Default State To GroundLocomotion++
 
 	CurrentState = ELocomotionState::GroundLocomotion;
+
+
 }
 
 void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaTime)
 {
 	if (OwnerCharacter)
 	{
-		FVector CharacterVelocity = OwnerCharacter->GetVelocity();
+		CharacterVelocity = OwnerCharacter->GetVelocity();
 
 		Speed = CharacterVelocity.Size();
 		Direction = CalculateDirection(CharacterVelocity, OwnerCharacter->GetActorRotation());
@@ -37,6 +42,7 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaTime)
 			PitchRotation = YawRotation;
 		}
 
+		Falling = OwnerCharacter->GetCharacterMovement()->IsFalling();
 	}
 	
 

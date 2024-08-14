@@ -35,6 +35,10 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	UInputAction* CrouchToggleAction;
 
+	//InputAction For Jump Movment - SpaceBar
+	UPROPERTY(EditDefaultsOnly)
+	UInputAction* JumpAction;
+
 	void BeginPlay() override;
 
 };

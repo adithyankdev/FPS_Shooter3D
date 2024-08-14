@@ -10,12 +10,16 @@ void AFPSPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = GetLocalPlayer()->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
+	if (GetLocalPlayer())
 	{
-		//Setting Up The Mapping Context
-		Subsystem->ClearAllMappings();
-		Subsystem->AddMappingContext(PlayerMappingContext, 0);
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = GetLocalPlayer()->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
+		{
+			//Setting Up The Mapping Context
+			Subsystem->ClearAllMappings();
+			Subsystem->AddMappingContext(PlayerMappingContext, 0);
+		}
 	}
+	
 
 	if (UEnhancedInputComponent* EnhancedInput = Cast <UEnhancedInputComponent>(this->InputComponent))
 	{
@@ -25,6 +29,9 @@ void AFPSPlayerController::BeginPlay()
 			EnhancedInput->BindAction(MoveAction, ETriggerEvent::Triggered, FPSPlayer, &AFPSPlayer::MoveFunction);
 			EnhancedInput->BindAction(LookAction, ETriggerEvent::Triggered, FPSPlayer, &AFPSPlayer::LookFunction);
 			EnhancedInput->BindAction(CrouchToggleAction, ETriggerEvent::Completed, FPSPlayer, &AFPSPlayer::CrouchToggleFunction);
+
+			EnhancedInput->BindAction(JumpAction, ETriggerEvent::Started, FPSPlayer,&AFPSPlayer::Jump);
+			EnhancedInput->BindAction(JumpAction, ETriggerEvent::Completed, FPSPlayer, &AFPSPlayer::StopJumping);
 		}
 	}
 

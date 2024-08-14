@@ -98,7 +98,7 @@ void AFPSPlayer::CrouchToggleFunction()
 		AnimInstanceInterface->ChangeLocomotionState(ELocomotionState::GroundLocomotion);
 		//GetCharacterMovement()->MaxWalkSpeed = 250.0f;
 	}
-
+	
 }
 
 
