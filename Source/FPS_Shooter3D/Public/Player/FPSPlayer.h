@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "Interfaces/PlayerInterface.h"
 #include "Interfaces/PlayerAnimeInterface.h"
 #include "InputActionValue.h"
@@ -27,10 +28,13 @@ public:
 
 	AFPSPlayer();
 
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly)
+	USkeletalMeshComponent* MeshComponent;
+
+	UPROPERTY(BlueprintReadOnly,EditDefaultsOnly)
 	USpringArmComponent* CameraBoom;
 
-	UPROPERTY(BlueprintReadWrite,EditDefaultsOnly)
+	UPROPERTY(BlueprintReadOnly,EditDefaultsOnly)
 	UCameraComponent* FPSCamera;
 
 	UPROPERTY()
@@ -62,7 +66,5 @@ public:
 
 	//Variable for Implementing The Toggle Functionality -- FlipFlop In The Blueprint
 	bool CrouchToggleValue;
-
-
 
 };

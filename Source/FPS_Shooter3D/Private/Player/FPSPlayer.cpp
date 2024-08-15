@@ -20,6 +20,9 @@ AFPSPlayer::AFPSPlayer()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	MeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponActor"));
+	MeshComponent->SetupAttachment(GetMesh(),TEXT("WeaponHold"));
+
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
 	CameraBoom->SetupAttachment(GetMesh(), TEXT("head"));
 
