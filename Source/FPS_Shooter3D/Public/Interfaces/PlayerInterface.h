@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+
 #include "PlayerInterface.generated.h"
 
 class APlayerController;
@@ -26,6 +27,6 @@ class FPS_SHOOTER3D_API IPlayerInterface
 public:
 
 	virtual APlayerController* GetPlayerController() = 0;
-	//virtual void SetMovementToPlayer(FVector Direction,FVector InputValue) = 0;
+	virtual void GetLocationForTrace(FVector& StartPoint, FVector& EndPoint) = 0;
 
 };

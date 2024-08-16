@@ -3,18 +3,25 @@
 #pragma once
 
 #include "CoreMinimal.h"
+//-------------------------------------------
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+//-------------------------------------------
+#include "InputActionValue.h"
+//-------------------------------------------
 #include "Interfaces/PlayerInterface.h"
 #include "Interfaces/PlayerAnimeInterface.h"
-#include "InputActionValue.h"
-#include "Camera/CameraComponent.h"
+//-------------------------------------------
+#include "Weapons/BaseWeapon.h"
 #include "Player/LocomotionSystem/AbstractState.h"
+//-------------------------------------------
 #include "FPSPlayer.generated.h"
 
 class AFPSPlayerController;
 class UPlayerAnimInstance;
+
 
 UCLASS()
 class FPS_SHOOTER3D_API AFPSPlayer : public ACharacter , public IPlayerInterface
@@ -26,7 +33,11 @@ public:
 	//Interface Function
 	APlayerController* GetPlayerController() override;
 
+	//Output Parameter Function ... Connecting From WeaponBase
+	void GetLocationForTrace(FVector& StartPoint, FVector& EndPoint) override;
+
 	AFPSPlayer();
+	~AFPSPlayer();
 
 	UPROPERTY(EditDefaultsOnly)
 	USkeletalMeshComponent* MeshComponent;
@@ -43,6 +54,7 @@ public:
 private:
 
 	//Referance For The Custom Controller
+	UPROPERTY()
 	AFPSPlayerController* FPSController;
 
 	//For Storing Differnt LocomotionStates
@@ -50,6 +62,12 @@ private:
 
 	//Variable For Passing In LocomotionStates
 	TVariant<FVector2D, bool>MovementValue;
+
+	//Variable For Referencing The Current Weapon Using
+	EWeaponType CurrentWeaponType;
+
+	//WeaponClass
+	BaseWeapon* WeaponBase;
 
 protected:
 
@@ -62,7 +80,11 @@ public:
 	//Function To Contain Movement Logic
 	void MoveFunction(const FInputActionValue& InputValue);
 	void LookFunction(const FInputActionValue& InputValue);
+
 	void CrouchToggleFunction();
+
+	void WeaponFireStartFunction();
+	void WeaponFireStopFunction();
 
 	//Variable for Implementing The Toggle Functionality -- FlipFlop In The Blueprint
 	bool CrouchToggleValue;

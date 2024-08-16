@@ -2,16 +2,27 @@
 
 
 #include "Player/FPSPlayer.h"
-#include "Player/FPSPlayerController.h"
+//---------------------------------------------------
 #include "GameFramework/CharacterMovementComponent.h"
+//---------------------------------------------------
+#include "Player/FPSPlayerController.h"
+//---------------------------------------------------
 #include "LocomotionSystem/GroundMoveState.h"
 #include "LocomotionSystem/LookState.h"
+//---------------------------------------------------
 #include "Player/Animation/PlayerAnimInstance.h"
+//---------------------------------------------------
 #include "Kismet/KismetSystemLibrary.h"
 
 APlayerController* AFPSPlayer::GetPlayerController()
 {
 	return FPSController;
+}
+
+void AFPSPlayer::GetLocationForTrace(FVector& StartPoint, FVector& EndPoint)
+{
+	StartPoint = FPSCamera->GetComponentLocation();
+	EndPoint = FPSCamera->GetForwardVector();
 }
 
 // Sets default values
@@ -23,19 +34,23 @@ AFPSPlayer::AFPSPlayer()
 	MeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponActor"));
 	MeshComponent->SetupAttachment(GetMesh(),TEXT("WeaponHold"));
 
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
-	CameraBoom->SetupAttachment(GetMesh(), TEXT("head"));
-
 	FPSCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	//FPSCamera->SetupAttachment(GetMesh(),TEXT("head"));
-	FPSCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	FPSCamera->SetupAttachment(GetMesh(),TEXT("head"));
 
 	AbstractState* State = new GroundMoveState();
 	StateLibrary.Add(StateEnum::Walking, State);
 	State = new LookState();
 	StateLibrary.Add(StateEnum::Looking, State);
 
-	
+	WeaponBase = new BaseWeapon();
+	CurrentWeaponType = EWeaponType::Rifile;
+}
+
+AFPSPlayer::~AFPSPlayer()
+{
+	StateLibrary.Empty();
+	WeaponBase = nullptr;
 }
 
 // Called when the game starts or when spawned
@@ -53,7 +68,8 @@ void AFPSPlayer::BeginPlay()
 		AnimInstanceInterface.SetObject(GetMesh()->GetAnimInstance());
 		AnimInstanceInterface.SetInterface(Interface);
 	}
-	
+	//Calling The Cache Function On The Weapon Class For Storing Data
+	WeaponBase->CacheInformation(this, MeshComponent, GetWorld());
 }
 
 // Called every frame
@@ -87,21 +103,25 @@ void AFPSPlayer::CrouchToggleFunction()
 	if (CrouchToggleValue)
 	{
 		Crouch();
-	//	GetCharacterMovement()->Crouch();  
-	//	GetCharacterMovement()->CanCrouch = true;
-		
 		AnimInstanceInterface->ChangeLocomotionState(ELocomotionState::Crouch);
-		//GetCharacterMovement()->MaxWalkSpeed = 150.0f;
+		
 	}
 	else
 	{
 		UnCrouch();
-	//	GetCharacterMovement()->UnCrouch();
-		//GetCharacterMovement()->CanCrouch = true;
 		AnimInstanceInterface->ChangeLocomotionState(ELocomotionState::GroundLocomotion);
-		//GetCharacterMovement()->MaxWalkSpeed = 250.0f;
 	}
 	
+}
+
+void AFPSPlayer::WeaponFireStartFunction()
+{
+	WeaponBase->StartShoot(CurrentWeaponType);
+}
+
+void AFPSPlayer::WeaponFireStopFunction()
+{
+	WeaponBase->StopShoot();
 }
 
 

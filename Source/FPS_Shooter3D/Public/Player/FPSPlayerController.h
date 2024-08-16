@@ -39,6 +39,10 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	UInputAction* JumpAction;
 
+	//InputAction For Firing Gun - LeftMouseButton
+	UPROPERTY(EditDefaultsOnly)
+	UInputAction* FireGunAction;
+
 	void BeginPlay() override;
 
 };
