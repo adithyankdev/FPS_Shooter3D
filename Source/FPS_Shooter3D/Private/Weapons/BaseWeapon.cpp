@@ -5,6 +5,11 @@
 #include "Player/FPSPlayer.h"
 #include "Interfaces/PlayerInterface.h"
 #include "Runtime/Engine/Public/TimerManager.h"
+
+#include "Particles/ParticleSystem.h"
+#include "Particles/ParticleSystemComponent.h"
+
+#include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 
 BaseWeapon::BaseWeapon()
@@ -12,7 +17,22 @@ BaseWeapon::BaseWeapon()
 	StartPoint = FVector::ZeroVector;
 	EndPoint = FVector::ZeroVector;
 	ShootingRange = 3500.0f;
+
+	//Loading GunFire Animation From The ContentBrowser
+	FireGunAnimSequence = LoadObject<UAnimSequence>(nullptr, TEXT("/Game/MilitaryWeapSilver/Weapons/Animations/Fire_Rifle_W.Fire_Rifle_W"));
+	GunImpactParticle = LoadObject<UParticleSystem>(nullptr, TEXT("/Game/MilitaryWeapSilver/FX/GunShotHitFloor_MediumImpact.GunShotHitFloor_MediumImpact"));
+
+	if (GunImpactParticle)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Good To Go Buddy"));
+
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Better Next Time"));
+	}
 }
+
 
 BaseWeapon::~BaseWeapon()
 {
@@ -30,6 +50,8 @@ void BaseWeapon::CacheInformation(ACharacter* Player, USkeletalMeshComponent* Gu
 	{
 		PlayerInterface.SetInterface(Interface);
 	}
+
+	CollisionParams.AddIgnoredActor(Player);
 }
 
 void BaseWeapon::StartShoot(EWeaponType WeaponType)
@@ -40,8 +62,17 @@ void BaseWeapon::StartShoot(EWeaponType WeaponType)
 void BaseWeapon::Shooting()
 {
 	PlayerInterface->GetLocationForTrace(StartPoint, EndPoint);
-	EndPoint = (EndPoint * ShootingRange) + StartPoint;
-	GetWorld->LineTraceSingleByChannel(TraceHitResult, StartPoint, EndPoint, TraceChannel, CollisionParams);
+	EndPoint = (EndPoint * ShootingRange) + StartPoint; //Adding Setting Up The EndLocation
+
+	//Playing The ShootGun Animation on Weapon
+	GunSkeletalMesh->PlayAnimation(FireGunAnimSequence,false);
+
+	if (bool IsHit = GetWorld->LineTraceSingleByChannel(TraceHitResult, StartPoint, EndPoint,ECC_Camera, CollisionParams))
+	{
+	    EmitterSpawnTransform.SetLocation(TraceHitResult.ImpactPoint);
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld, GunImpactParticle, EmitterSpawnTransform, true, EPSCPoolMethod::AutoRelease);
+	}
+	
 	DrawDebugLine(GetWorld, StartPoint, EndPoint,FLinearColor::Green.ToFColor(true), true, 5.0f);
 }
 
