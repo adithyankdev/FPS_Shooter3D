@@ -19,7 +19,7 @@ BaseWeapon::BaseWeapon()
 	ShootingRange = 3500.0f;
 
 	//Loading GunFire Animation From The ContentBrowser
-	FireGunAnimSequence = LoadObject<UAnimSequence>(nullptr, TEXT("/Game/MilitaryWeapSilver/Weapons/Animations/Fire_Rifle_W.Fire_Rifle_W"));
+	FireGunAnimSequence = LoadObject<UAnimSequence>(nullptr, TEXT("/Game/Weapons/Rifle/Animations/Weap_Rifle_Fire.Weap_Rifle_Fire"));
 	GunImpactParticle = LoadObject<UParticleSystem>(nullptr, TEXT("/Game/MilitaryWeapSilver/FX/GunShotHitFloor_MediumImpact.GunShotHitFloor_MediumImpact"));
 
 	if (GunImpactParticle)
@@ -56,7 +56,7 @@ void BaseWeapon::CacheInformation(ACharacter* Player, USkeletalMeshComponent* Gu
 
 void BaseWeapon::StartShoot(EWeaponType WeaponType)
 {
-	GetWorld->GetTimerManager().SetTimer(ShootWeaponTimer,[this](){ Shooting();},0.1,true);
+	GetWorld->GetTimerManager().SetTimer(ShootWeaponTimer,[this](){ Shooting();},0.12,true);
 }
 
 void BaseWeapon::Shooting()
