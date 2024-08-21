@@ -32,4 +32,5 @@ public:
 
 	//Function For Change Motion State Influencing Animation
 	virtual void ChangeLocomotionState(ELocomotionState NewState) = 0; 
+	virtual void ReloadWeapon(bool CanReload) = 0 ;
 };

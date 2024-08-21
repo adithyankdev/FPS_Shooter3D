@@ -33,8 +33,10 @@ void AFPSPlayerController::BeginPlay()
 			EnhancedInput->BindAction(JumpAction, ETriggerEvent::Started, FPSPlayer,&AFPSPlayer::Jump);
 			EnhancedInput->BindAction(JumpAction, ETriggerEvent::Completed, FPSPlayer, &AFPSPlayer::StopJumping);
 
+			//Weapon
 			EnhancedInput->BindAction(FireGunAction, ETriggerEvent::Started, FPSPlayer, &AFPSPlayer::WeaponFireStartFunction);
 			EnhancedInput->BindAction(FireGunAction, ETriggerEvent::Completed, FPSPlayer, &AFPSPlayer::WeaponFireStopFunction);
+			EnhancedInput->BindAction(ReloadGunAction, ETriggerEvent::Triggered, FPSPlayer, &AFPSPlayer::WeaponReload);
 		}
 	}
 

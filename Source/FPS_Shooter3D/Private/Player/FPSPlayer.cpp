@@ -12,6 +12,7 @@
 //---------------------------------------------------
 #include "Player/Animation/PlayerAnimInstance.h"
 //---------------------------------------------------
+#include "Runtime/Engine/Public/TimerManager.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 APlayerController* AFPSPlayer::GetPlayerController()
@@ -122,6 +123,19 @@ void AFPSPlayer::WeaponFireStartFunction()
 void AFPSPlayer::WeaponFireStopFunction()
 {
 	WeaponBase->StopShoot();
+}
+
+void AFPSPlayer::WeaponReload()
+{
+	AnimInstanceInterface->ReloadWeapon(true);
+	GetWorld()->GetTimerManager().SetTimer(ReloadWeaponTimer, this, &AFPSPlayer::WeaponReloaded, 2);
+	
+}
+
+void AFPSPlayer::WeaponReloaded()
+{
+	AnimInstanceInterface->ReloadWeapon(false);
+	WeaponBase->ReloadWeapon();
 }
 
 

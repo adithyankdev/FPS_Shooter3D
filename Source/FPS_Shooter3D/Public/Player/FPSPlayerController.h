@@ -43,6 +43,9 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	UInputAction* FireGunAction;
 
+	UPROPERTY(EditDefaultsOnly)
+	UInputAction* ReloadGunAction;
+
 	void BeginPlay() override;
 
 };

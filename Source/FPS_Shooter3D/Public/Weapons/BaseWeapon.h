@@ -15,6 +15,7 @@ enum class EWeaponType : int
 	Rifile,
 };
 
+
 /**
  * 
  */
@@ -28,6 +29,8 @@ protected:
 	EWeaponType CurrentWeapon;
 
 	float ShootingRange;
+
+	int BulletCount;
 
 	/*Cache Variables */
 	ACharacter* OwnedPlayer;
@@ -46,11 +49,14 @@ public:
 	void Shooting();
 	void StopShoot();
 
+	void ReloadWeapon();
+
 private:
 
-	UAnimSequence* FireGunAnimSequence;
+	UAnimSequence* RifleGunFiringAnim;
+	UAnimSequence* RifleGunNoBulletFiringAnim;
 
-	UParticleSystem* GunImpactParticle;
+	UParticleSystem* GunShotImpactParticle;
 	FTransform EmitterSpawnTransform;
 
 	/*Pre Declaraton Of Line Trace Parameters*/

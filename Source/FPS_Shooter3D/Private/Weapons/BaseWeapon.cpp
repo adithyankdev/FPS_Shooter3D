@@ -17,20 +17,14 @@ BaseWeapon::BaseWeapon()
 	StartPoint = FVector::ZeroVector;
 	EndPoint = FVector::ZeroVector;
 	ShootingRange = 3500.0f;
+	BulletCount = 30;
 
 	//Loading GunFire Animation From The ContentBrowser
-	FireGunAnimSequence = LoadObject<UAnimSequence>(nullptr, TEXT("/Game/Weapons/Rifle/Animations/Weap_Rifle_Fire.Weap_Rifle_Fire"));
-	GunImpactParticle = LoadObject<UParticleSystem>(nullptr, TEXT("/Game/MilitaryWeapSilver/FX/GunShotHitFloor_MediumImpact.GunShotHitFloor_MediumImpact"));
+	RifleGunFiringAnim = LoadObject<UAnimSequence>(nullptr, TEXT("/Game/Weapons/Rifle/Animations/Weap_Rifle_Fire.Weap_Rifle_Fire"));
+	RifleGunNoBulletFiringAnim = LoadObject<UAnimSequence>(nullptr, TEXT("/Game/Weapons/Rifle/Animations/RifleWeapon_NoBulletFire.RifleWeapon_NoBulletFire"));
 
-	if (GunImpactParticle)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Good To Go Buddy"));
+	GunShotImpactParticle = LoadObject<UParticleSystem>(nullptr, TEXT("/Game/MilitaryWeapSilver/FX/GunShotHitFloor_MediumImpact.GunShotHitFloor_MediumImpact"));
 
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Better Next Time"));
-	}
 }
 
 
@@ -61,22 +55,35 @@ void BaseWeapon::StartShoot(EWeaponType WeaponType)
 
 void BaseWeapon::Shooting()
 {
-	PlayerInterface->GetLocationForTrace(StartPoint, EndPoint);
-	EndPoint = (EndPoint * ShootingRange) + StartPoint; //Adding Setting Up The EndLocation
-
-	//Playing The ShootGun Animation on Weapon
-	GunSkeletalMesh->PlayAnimation(FireGunAnimSequence,false);
-
-	if (bool IsHit = GetWorld->LineTraceSingleByChannel(TraceHitResult, StartPoint, EndPoint,ECC_Camera, CollisionParams))
+	if (BulletCount > 0)
 	{
-	    EmitterSpawnTransform.SetLocation(TraceHitResult.ImpactPoint);
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld, GunImpactParticle, EmitterSpawnTransform, true, EPSCPoolMethod::AutoRelease);
+		PlayerInterface->GetLocationForTrace(StartPoint, EndPoint);
+		EndPoint = (EndPoint * ShootingRange) + StartPoint; //Adding Setting Up The EndLocation
+
+		//Playing The ShootGun Animation on Weapon
+		GunSkeletalMesh->PlayAnimation(RifleGunFiringAnim, false);
+
+		if (bool IsHit = GetWorld->LineTraceSingleByChannel(TraceHitResult, StartPoint, EndPoint, ECC_Camera, CollisionParams))
+		{
+			EmitterSpawnTransform.SetLocation(TraceHitResult.ImpactPoint);
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld, GunShotImpactParticle, EmitterSpawnTransform, true, EPSCPoolMethod::AutoRelease);
+		}
+		BulletCount--;
+	}
+	else 
+	{
+		GunSkeletalMesh->PlayAnimation(RifleGunNoBulletFiringAnim,false);
 	}
 	
-	DrawDebugLine(GetWorld, StartPoint, EndPoint,FLinearColor::Green.ToFColor(true), true, 5.0f);
+	//DrawDebugLine(GetWorld, StartPoint, EndPoint,FLinearColor::Green.ToFColor(true), true, 5.0f);
 }
 
 void BaseWeapon::StopShoot()
 {
 	GetWorld->GetTimerManager().ClearTimer(ShootWeaponTimer);
+}
+
+void BaseWeapon::ReloadWeapon()
+{
+	BulletCount = 30;
 }

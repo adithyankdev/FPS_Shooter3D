@@ -69,6 +69,9 @@ private:
 	//WeaponClass
 	BaseWeapon* WeaponBase;
 
+	/*Timer For Reloading Weapon*/
+	FTimerHandle ReloadWeaponTimer;
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -85,6 +88,8 @@ public:
 
 	void WeaponFireStartFunction();
 	void WeaponFireStopFunction();
+	void WeaponReload();
+	void WeaponReloaded();
 
 	//Variable for Implementing The Toggle Functionality -- FlipFlop In The Blueprint
 	bool CrouchToggleValue;

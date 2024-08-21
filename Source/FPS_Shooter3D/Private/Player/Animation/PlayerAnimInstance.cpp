@@ -13,6 +13,11 @@ void UPlayerAnimInstance::ChangeLocomotionState(ELocomotionState NewState)
 	CurrentState = NewState;
 }
 
+void UPlayerAnimInstance::ReloadWeapon(bool CanReload)
+{
+	IsReloadingWeapon = CanReload;
+}
+
 void UPlayerAnimInstance::NativeInitializeAnimation()
 {
 	OwnerCharacter = Cast <ACharacter>(TryGetPawnOwner());

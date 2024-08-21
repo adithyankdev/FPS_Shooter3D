@@ -19,6 +19,8 @@ public:
 
 	void ChangeLocomotionState(ELocomotionState NewState) override;
 
+	void ReloadWeapon(bool CanReload) override;
+
 protected:
 
 	//Caching The chracter Interface
@@ -48,6 +50,9 @@ protected:
 	ELocomotionState CurrentState;
 
 public:
+
+	UPROPERTY(BlueprintReadOnly)
+	bool IsReloadingWeapon;
 
 	void NativeInitializeAnimation() override;
 	void NativeUpdateAnimation(float DeltaTime) override;
