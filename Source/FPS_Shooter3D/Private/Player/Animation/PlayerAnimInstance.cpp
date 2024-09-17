@@ -13,15 +13,17 @@ void UPlayerAnimInstance::ChangeLocomotionState(ELocomotionState NewState)
 	CurrentState = NewState;
 }
 
-void UPlayerAnimInstance::ReloadWeapon(bool CanReload)
-{
-	IsReloadingWeapon = CanReload;
-}
 
 void UPlayerAnimInstance::NativeInitializeAnimation()
 {
 	OwnerCharacter = Cast <ACharacter>(TryGetPawnOwner());
 	//Setting Default State To GroundLocomotion++
+
+	if (IPlayerInterface* Interface = Cast<IPlayerInterface>(OwnerCharacter))
+	{
+		OwnerInterface.SetObject(OwnerCharacter);
+		OwnerInterface.SetInterface(Interface);
+	}
 
 	CurrentState = ELocomotionState::GroundLocomotion;
 
@@ -48,6 +50,7 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaTime)
 		}
 
 		Falling = OwnerCharacter->GetCharacterMovement()->IsFalling();
+
 	}
 	
 

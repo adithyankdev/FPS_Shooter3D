@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Interfaces/PlayerAnimeInterface.h"
 #include "Animation/AnimInstance.h"
+#include "Interfaces/PlayerInterface.h"
 #include "PlayerAnimInstance.generated.h"
 
 /**
@@ -19,7 +20,10 @@ public:
 
 	void ChangeLocomotionState(ELocomotionState NewState) override;
 
-	void ReloadWeapon(bool CanReload) override;
+private:
+
+	UPROPERTY()
+	TScriptInterface<IPlayerInterface>OwnerInterface;
 
 protected:
 

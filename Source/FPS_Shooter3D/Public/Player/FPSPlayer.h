@@ -36,6 +36,8 @@ public:
 	//Output Parameter Function ... Connecting From WeaponBase
 	void GetLocationForTrace(FVector& StartPoint, FVector& EndPoint) override;
 
+	bool IsReloading() override;
+
 	AFPSPlayer();
 	~AFPSPlayer();
 
@@ -71,6 +73,9 @@ private:
 
 	/*Timer For Reloading Weapon*/
 	FTimerHandle ReloadWeaponTimer;
+
+	//Variable For Checking Reloading
+	bool IsReload;
 
 protected:
 

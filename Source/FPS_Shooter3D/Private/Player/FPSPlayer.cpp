@@ -26,6 +26,11 @@ void AFPSPlayer::GetLocationForTrace(FVector& StartPoint, FVector& EndPoint)
 	EndPoint = FPSCamera->GetForwardVector();
 }
 
+bool AFPSPlayer::IsReloading()
+{
+	return IsReload;
+}
+
 // Sets default values
 AFPSPlayer::AFPSPlayer()
 {
@@ -127,14 +132,14 @@ void AFPSPlayer::WeaponFireStopFunction()
 
 void AFPSPlayer::WeaponReload()
 {
-	AnimInstanceInterface->ReloadWeapon(true);
-	GetWorld()->GetTimerManager().SetTimer(ReloadWeaponTimer, this, &AFPSPlayer::WeaponReloaded, 2);
+	IsReload = true;
+	GetWorld()->GetTimerManager().SetTimer(ReloadWeaponTimer, this, &AFPSPlayer::WeaponReloaded, 2.1);
 	
 }
 
 void AFPSPlayer::WeaponReloaded()
 {
-	AnimInstanceInterface->ReloadWeapon(false);
+	IsReload = false;
 	WeaponBase->ReloadWeapon();
 }
 

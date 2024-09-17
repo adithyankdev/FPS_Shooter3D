@@ -28,5 +28,6 @@ public:
 
 	virtual APlayerController* GetPlayerController() = 0;
 	virtual void GetLocationForTrace(FVector& StartPoint, FVector& EndPoint) = 0;
+	virtual bool IsReloading() = 0;
 
 };
