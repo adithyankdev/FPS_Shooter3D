@@ -105,7 +105,7 @@ void AFPSPlayer::LookFunction(const FInputActionValue& InputValue)
 
 void AFPSPlayer::SprintFunction(const FInputActionValue& InputValue)
 {
-	if(FPSController->IsInputKeyDown(EKeys::W) && !Firing)
+	if(FPSController->IsInputKeyDown(EKeys::W) && !FPSController->IsInputKeyDown(EKeys::S) && !Firing)
 	{
 		AnimInstanceInterface->ChangeLocomotionState(ELocomotionState::Sprinting);
 		GetCharacterMovement()->MaxWalkSpeed = 500.0f;
