@@ -10,7 +10,7 @@ class ACharacter;
 enum class StateEnum
 {
 	Walking,
-	Jumping,
+	Sprinting,
 	Crouching,
 	Looking,
 };

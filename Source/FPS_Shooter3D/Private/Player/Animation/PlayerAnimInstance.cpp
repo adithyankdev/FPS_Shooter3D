@@ -6,7 +6,6 @@
 #include "GameFramework/CharacterMovementComponent.h"
 
 
-
 //Assiging The Latest State
 void UPlayerAnimInstance::ChangeLocomotionState(ELocomotionState NewState)
 {
@@ -26,7 +25,6 @@ void UPlayerAnimInstance::NativeInitializeAnimation()
 	}
 
 	CurrentState = ELocomotionState::GroundLocomotion;
-
 
 }
 

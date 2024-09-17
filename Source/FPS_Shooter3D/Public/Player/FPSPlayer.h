@@ -76,6 +76,8 @@ private:
 
 	//Variable For Checking Reloading
 	bool IsReload;
+	//Variable For Checking Firing
+	bool Firing;
 
 protected:
 
@@ -88,6 +90,8 @@ public:
 	//Function To Contain Movement Logic
 	void MoveFunction(const FInputActionValue& InputValue);
 	void LookFunction(const FInputActionValue& InputValue);
+	void SprintFunction(const FInputActionValue& InputValue);
+	void StopSprintFunction();
 
 	void CrouchToggleFunction();
 

@@ -31,6 +31,9 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	UInputAction* LookAction;
 
+	UPROPERTY(EditDefaultsOnly)
+	UInputAction* SprintAction;
+
 	//InputAction For Crouch Movement - C
 	UPROPERTY(EditDefaultsOnly)
 	UInputAction* CrouchToggleAction;

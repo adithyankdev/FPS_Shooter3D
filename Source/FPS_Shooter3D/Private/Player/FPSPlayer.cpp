@@ -100,6 +100,28 @@ void AFPSPlayer::LookFunction(const FInputActionValue& InputValue)
 {  
 	MovementValue.Set<FVector2D>(InputValue.Get<FVector2D>());
 	StateLibrary[StateEnum::Looking]->EnterState(this, MovementValue);
+	
+}
+
+void AFPSPlayer::SprintFunction(const FInputActionValue& InputValue)
+{
+	if(FPSController->IsInputKeyDown(EKeys::W) && !Firing)
+	{
+		AnimInstanceInterface->ChangeLocomotionState(ELocomotionState::Sprinting);
+		GetCharacterMovement()->MaxWalkSpeed = 500.0f;
+	}
+	else
+	{
+		StopSprintFunction();
+	}
+
+}
+
+void AFPSPlayer::StopSprintFunction()
+{
+	AnimInstanceInterface->ChangeLocomotionState(ELocomotionState::GroundLocomotion);
+	GetCharacterMovement()->MaxWalkSpeed = 200.0f;
+	
 }
 
 //Function Implementing With Toogle Method
@@ -123,11 +145,13 @@ void AFPSPlayer::CrouchToggleFunction()
 void AFPSPlayer::WeaponFireStartFunction()
 {
 	WeaponBase->StartShoot(CurrentWeaponType);
+	Firing = true;
 }
 
 void AFPSPlayer::WeaponFireStopFunction()
 {
 	WeaponBase->StopShoot();
+	Firing = false;
 }
 
 void AFPSPlayer::WeaponReload()

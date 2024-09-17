@@ -10,6 +10,7 @@ UENUM(BlueprintType)
 enum class ELocomotionState : uint8
 {
 	GroundLocomotion,
+    Sprinting,
 	Crouch
 };
 
